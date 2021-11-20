@@ -1,5 +1,6 @@
 package com.dranoer.giphyapp.di
 
+import com.dranoer.giphyapp.data.remote.DataSource
 import com.dranoer.giphyapp.data.remote.RequestInterceptor
 import com.dranoer.giphyapp.data.remote.WebService
 import com.dranoer.giphyapp.domain.GiphyRepository
@@ -37,8 +38,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRepository(
-        remoteDataSource: WebService,
+        dataSource: DataSource,
     ) =
-        GiphyRepository(remoteDataSource)
+        GiphyRepository(dataSource)
 
 }

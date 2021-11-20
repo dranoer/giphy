@@ -1,15 +1,15 @@
 package com.dranoer.giphyapp.domain
 
-import com.dranoer.giphyapp.data.model.GiphyResponse
-import com.dranoer.giphyapp.data.remote.SafeApiRequest
-import com.dranoer.giphyapp.data.remote.WebService
+import com.dranoer.giphyapp.data.model.Giphy
+import com.dranoer.giphyapp.data.remote.DataSource
+import com.dranoer.giphyapp.data.remote.Resource
 import javax.inject.Inject
 
 class GiphyRepository @Inject constructor(
-    private val webService: WebService
-) : SafeApiRequest() {
+    private val networkDataSource: DataSource,
+) {
 
-    suspend fun getTrends(): GiphyResponse {
-        return apiRequest { webService.getTrends() }
+    suspend fun getTrending(): Resource<List<Giphy>> {
+        return networkDataSource.getTrends()
     }
 }
