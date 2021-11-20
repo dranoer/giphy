@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dranoer.giphyapp.databinding.ActivityMainBinding
 import com.dranoer.giphyapp.ui.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
 val tabArray = arrayOf(
     "Main",
     "Fav",
 )
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
