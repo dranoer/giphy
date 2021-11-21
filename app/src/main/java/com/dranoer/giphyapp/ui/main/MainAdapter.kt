@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,22 +24,29 @@ class MainAdapter constructor(
         val current = getItem(position)
         holder.bind(
             imageUrl = current.images.preview.imageUrl,
+            title = current.title ?: "",
+            username = current.user?.name ?: ""
         )
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(current.title)
+            current.title?.let { it1 -> onClickListener.onClick(it1) }
         }
     }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageItemView: ImageView = itemView.findViewById(R.id.image)
+        private val imageItemView: ImageView = itemView.findViewById(R.id.gif_image)
+        private val titleItemView: TextView = itemView.findViewById(R.id.title_text)
+        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
 
-        fun bind(imageUrl: String?) {
+        fun bind(imageUrl: String?, title: String?, username: String?) {
             Glide
                 .with(itemView.context)
                 .load(imageUrl)
                 .centerCrop()
                 .placeholder(R.drawable.ic_placeholder)
                 .into(imageItemView)
+
+            if (title != null) titleItemView.text = title
+            if (username != null) usernameItemView.text = username
         }
 
         companion object {

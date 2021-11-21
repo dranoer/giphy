@@ -9,7 +9,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dranoer.giphyapp.data.remote.Resource
 import com.dranoer.giphyapp.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,21 +35,21 @@ class MainFragment : Fragment() {
         val adapter = MainAdapter(MainAdapter.OnClickListener { itemId ->
         })
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.getTrends().observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> {
-                    binding.progressBar.isVisible = true
+                    binding.progressbar.isVisible = true
                 }
                 is Resource.Success -> {
                     result.data.let {
                         adapter.submitList(it)
                     }
-                    binding.progressBar.isGone = true
+                    binding.progressbar.isGone = true
                 }
                 is Resource.Failure -> {
-                    binding.progressBar.isGone = true
+                    binding.progressbar.isGone = true
                     Log.d("nazanin", "fail state")
                 }
             }
@@ -58,23 +58,4 @@ class MainFragment : Fragment() {
 
         return view
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        viewModel.getTrends().observe(viewLifecycleOwner) { result ->
-//            when (result) {
-//                is Resource.Loading -> {
-//                    Log.d("nazanin", "loading state")
-//                }
-//                is Resource.Success -> {
-//                    Log.d("nazanin", "success state")
-//                }
-//                is Resource.Failure -> {
-//                    Log.d("nazanin", "fail state")
-//                }
-//            }
-//
-//        }
-//    }
 }

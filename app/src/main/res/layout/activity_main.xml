@@ -11,22 +11,22 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_700"
+        android:background="@color/gainsboro"
         app:title="GIPHY"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/dimgrey" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_700"
-        app:tabIconTint="@color/purple_200"
+        android:background="@color/gainsboro"
+        app:tabIconTint="@color/dimgrey"
         app:tabIndicatorColor="@color/white"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/purple_200" />
+        app:tabSelectedTextColor="@color/darkgrey"
+        app:tabTextColor="@color/dimgrey" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
