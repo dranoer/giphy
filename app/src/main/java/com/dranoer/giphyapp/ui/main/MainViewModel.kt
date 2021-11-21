@@ -21,4 +21,13 @@ class MainViewModel @Inject constructor(
             emit(Resource.Failure(e))
         }
     }
+
+    fun search(name: String) = liveData(Dispatchers.IO) {
+        emit(Resource.Loading())
+        try {
+            emit(repository.search(name))
+        } catch (e: Exception) {
+            emit(Resource.Failure(e))
+        }
+    }
 }

@@ -12,4 +12,8 @@ class DataSource @Inject constructor(
     suspend fun getTrends(): Resource<List<Giphy>> {
         return Resource.Success(webService.getTrends().giphies)
     }
+
+    suspend fun search(name: String): Resource<List<Giphy>> {
+        return Resource.Success(webService.search(name).giphies)
+    }
 }

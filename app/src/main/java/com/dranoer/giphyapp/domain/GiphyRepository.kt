@@ -12,4 +12,8 @@ class GiphyRepository @Inject constructor(
     suspend fun getTrending(): Resource<List<Giphy>> {
         return networkDataSource.getTrends()
     }
+
+    suspend fun search(name: String): Resource<List<Giphy>> {
+        return networkDataSource.search(name)
+    }
 }
