@@ -4,8 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Giphy(
     @field:SerializedName("title")
-    val title: String,
+    val title: String?,
 
     @field:SerializedName("images")
     val images: GiphyImage,
+
+    @field:SerializedName("user")
+    val user: User?,
 )
