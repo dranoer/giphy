@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dranoer.giphyapp.data.remote.Resource
 import com.dranoer.giphyapp.databinding.FragmentMainBinding
+import com.dranoer.giphyapp.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +55,10 @@ class MainFragment : Fragment() {
                 }
             }
 
+        }
+
+        binding.searchView.onQueryTextChanged {
+            viewModel.search(it)
         }
 
         return view
