@@ -5,8 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.dranoer.giphyapp.data.remote.Resource
 import com.dranoer.giphyapp.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,25 +31,50 @@ class MainFragment : Fragment() {
 
         viewModel.getTrends()
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val recyclerView = binding.recyclerview
+        val adapter = MainAdapter(MainAdapter.OnClickListener { itemId ->
+        })
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
 
         viewModel.getTrends().observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> {
-                    Log.d("nazanin", "loading state")
+                    binding.progressBar.isVisible = true
                 }
                 is Resource.Success -> {
-                    Log.d("nazanin", "success state")
+                    result.data.let {
+                        adapter.submitList(it)
+                    }
+                    binding.progressBar.isGone = true
                 }
                 is Resource.Failure -> {
+                    binding.progressBar.isGone = true
                     Log.d("nazanin", "fail state")
                 }
             }
 
         }
+
+        return view
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        viewModel.getTrends().observe(viewLifecycleOwner) { result ->
+//            when (result) {
+//                is Resource.Loading -> {
+//                    Log.d("nazanin", "loading state")
+//                }
+//                is Resource.Success -> {
+//                    Log.d("nazanin", "success state")
+//                }
+//                is Resource.Failure -> {
+//                    Log.d("nazanin", "fail state")
+//                }
+//            }
+//
+//        }
+//    }
 }
