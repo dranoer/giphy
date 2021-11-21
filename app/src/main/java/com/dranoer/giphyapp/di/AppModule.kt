@@ -1,5 +1,6 @@
 package com.dranoer.giphyapp.di
 
+import com.dranoer.giphyapp.Constants
 import com.dranoer.giphyapp.data.remote.DataSource
 import com.dranoer.giphyapp.data.remote.RequestInterceptor
 import com.dranoer.giphyapp.data.remote.WebService
@@ -29,7 +30,7 @@ object AppModule {
 
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://api.giphy.com/v1/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(WebService::class.java)
