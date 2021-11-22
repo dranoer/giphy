@@ -23,7 +23,7 @@ class GiphyRepository @Inject constructor(
         when (response) {
             is Resource.Success -> {
                 for (item in response.data) {
-                    val giphyEntity = GiphyEntity(id = item.id, title = item.title!!)
+                    val giphyEntity = GiphyEntity(id = item.id, title = item.title!!, isFavorite = false)
                     giphiesList.add(giphyEntity)
                 }
                 localDataSource.saveGiphies(giphiesList)

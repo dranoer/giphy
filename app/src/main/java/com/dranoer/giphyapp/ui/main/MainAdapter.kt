@@ -25,6 +25,7 @@ class MainAdapter constructor(
         holder.bind(
 //            imageUrl = current.images.preview.imageUrl,
             title = current.title ?: "",
+            isFavorite = current.isFavorite,
 //            username = current.user?.name ?: ""
         )
         holder.itemView.setOnClickListener {
@@ -37,7 +38,7 @@ class MainAdapter constructor(
         private val titleItemView: TextView = itemView.findViewById(R.id.title_text)
 //        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
 
-        fun bind(title: String?) {
+        fun bind(title: String?, isFavorite: Boolean) {
 //            Glide
 //                .with(itemView.context)
 //                .load(imageUrl)

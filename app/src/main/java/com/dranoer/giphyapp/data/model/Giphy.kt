@@ -24,6 +24,8 @@ data class GiphyEntity(
     val id: String,
 
     val title: String = "",
+    val isFavorite: Boolean = false,
+
 //    val images: GiphyImage,
 //    val user: User?,
 )
