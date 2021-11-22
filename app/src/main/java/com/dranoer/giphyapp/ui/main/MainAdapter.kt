@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dranoer.giphyapp.R
-import com.dranoer.giphyapp.data.model.Giphy
+import com.dranoer.giphyapp.data.model.GiphyEntity
 
 class MainAdapter constructor(
     private val onClickListener: OnClickListener
-) : ListAdapter<Giphy, MainAdapter.MainViewHolder>(MAIN_COMPARATOR) {
+) : ListAdapter<GiphyEntity, MainAdapter.MainViewHolder>(MAIN_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder.create(parent)
@@ -23,9 +23,9 @@ class MainAdapter constructor(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(
-            imageUrl = current.images.preview.imageUrl,
+//            imageUrl = current.images.preview.imageUrl,
             title = current.title ?: "",
-            username = current.user?.name ?: ""
+//            username = current.user?.name ?: ""
         )
         holder.itemView.setOnClickListener {
             current.title?.let { it1 -> onClickListener.onClick(it1) }
@@ -33,20 +33,20 @@ class MainAdapter constructor(
     }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageItemView: ImageView = itemView.findViewById(R.id.gif_image)
+//        private val imageItemView: ImageView = itemView.findViewById(R.id.gif_image)
         private val titleItemView: TextView = itemView.findViewById(R.id.title_text)
-        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
+//        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
 
-        fun bind(imageUrl: String?, title: String?, username: String?) {
-            Glide
-                .with(itemView.context)
-                .load(imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.ic_placeholder)
-                .into(imageItemView)
+        fun bind(title: String?) {
+//            Glide
+//                .with(itemView.context)
+//                .load(imageUrl)
+//                .centerCrop()
+//                .placeholder(R.drawable.ic_placeholder)
+//                .into(imageItemView)
 
             if (title != null) titleItemView.text = title
-            if (username != null) usernameItemView.text = username
+//            if (username != null) usernameItemView.text = username
         }
 
         companion object {
@@ -59,13 +59,13 @@ class MainAdapter constructor(
     }
 
     companion object {
-        private val MAIN_COMPARATOR = object : DiffUtil.ItemCallback<Giphy>() {
-            override fun areItemsTheSame(oldItem: Giphy, newItem: Giphy): Boolean {
+        private val MAIN_COMPARATOR = object : DiffUtil.ItemCallback<GiphyEntity>() {
+            override fun areItemsTheSame(oldItem: GiphyEntity, newItem: GiphyEntity): Boolean {
                 return oldItem === newItem
             }
 
-            override fun areContentsTheSame(oldItem: Giphy, newItem: Giphy): Boolean {
-                return oldItem.title == newItem.title
+            override fun areContentsTheSame(oldItem: GiphyEntity, newItem: GiphyEntity): Boolean {
+                return oldItem.id == newItem.id
             }
         }
     }
