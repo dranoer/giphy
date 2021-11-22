@@ -62,12 +62,14 @@
             app:layout_constraintTop_toBottomOf="@+id/title_text"
             tools:text="by: Nazanin" />
 
-        <Button
+        <ImageButton
             android:id="@+id/fav_button"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="4dp"
+            android:contentDescription="@string/button_favorite_desc"
+            android:src="@drawable/ic_unfavourite"
             app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/gif_card"
             app:layout_constraintStart_toEndOf="@+id/gif_card"

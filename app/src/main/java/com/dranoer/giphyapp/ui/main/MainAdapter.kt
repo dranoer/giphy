@@ -3,12 +3,11 @@ package com.dranoer.giphyapp.ui.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.dranoer.giphyapp.R
 import com.dranoer.giphyapp.data.model.GiphyEntity
 
@@ -34,9 +33,11 @@ class MainAdapter constructor(
     }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        private val imageItemView: ImageView = itemView.findViewById(R.id.gif_image)
+        //        private val imageItemView: ImageView = itemView.findViewById(R.id.gif_image)
         private val titleItemView: TextView = itemView.findViewById(R.id.title_text)
-//        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
+
+        //        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
+        private val buttonItemView: ImageButton = itemView.findViewById(R.id.fav_button)
 
         fun bind(title: String?, isFavorite: Boolean) {
 //            Glide
@@ -48,6 +49,10 @@ class MainAdapter constructor(
 
             if (title != null) titleItemView.text = title
 //            if (username != null) usernameItemView.text = username
+            when (isFavorite) {
+                true -> buttonItemView.setImageResource(R.drawable.ic_favorite)
+                false -> buttonItemView.setImageResource(R.drawable.ic_unfavourite)
+            }
         }
 
         companion object {
