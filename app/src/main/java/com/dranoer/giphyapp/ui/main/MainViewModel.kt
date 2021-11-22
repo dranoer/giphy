@@ -32,4 +32,10 @@ class MainViewModel @ExperimentalCoroutinesApi
             emit(Resource.Failure(e))
         }
     }
+
+    fun updateFavorite(id: String) {
+        viewModelScope.launch {
+            repository.updateGiphy(id)
+        }
+    }
 }

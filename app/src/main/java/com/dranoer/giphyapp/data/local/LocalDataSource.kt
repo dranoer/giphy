@@ -16,4 +16,12 @@ class LocalDataSource @Inject constructor(private val giphyDao: GiphyDao) {
     suspend fun getCashedGiphies(): Resource<Flow<List<GiphyEntity>>> {
         return Resource.Success(giphyDao.getGiphies())
     }
+
+    suspend fun getGiphy(id: String): Boolean {
+        return giphyDao.getGiphy(id)
+    }
+
+    suspend fun updateGiphy(id: String, n: Boolean) {
+        giphyDao.updateGiphy(id, n)
+    }
 }

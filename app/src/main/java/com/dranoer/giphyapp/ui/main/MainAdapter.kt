@@ -1,5 +1,6 @@
 package com.dranoer.giphyapp.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +23,14 @@ class MainAdapter constructor(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(
+            id = current.id,
 //            imageUrl = current.images.preview.imageUrl,
             title = current.title ?: "",
             isFavorite = current.isFavorite,
 //            username = current.user?.name ?: ""
         )
         holder.itemView.setOnClickListener {
-            current.title?.let { it1 -> onClickListener.onClick(it1) }
+            onClickListener.onClick(current.id)
         }
     }
 
@@ -39,7 +41,8 @@ class MainAdapter constructor(
         //        private val usernameItemView: TextView = itemView.findViewById(R.id.username_text)
         private val buttonItemView: ImageButton = itemView.findViewById(R.id.fav_button)
 
-        fun bind(title: String?, isFavorite: Boolean) {
+
+        fun bind(id: String, title: String?, isFavorite: Boolean) {
 //            Glide
 //                .with(itemView.context)
 //                .load(imageUrl)
@@ -52,6 +55,12 @@ class MainAdapter constructor(
             when (isFavorite) {
                 true -> buttonItemView.setImageResource(R.drawable.ic_favorite)
                 false -> buttonItemView.setImageResource(R.drawable.ic_unfavourite)
+            }
+        }
+
+        init {
+            buttonItemView.setOnClickListener {
+                Log.d("nazanin", "button clicked")
             }
         }
 

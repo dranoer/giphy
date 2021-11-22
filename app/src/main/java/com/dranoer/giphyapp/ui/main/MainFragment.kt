@@ -1,6 +1,7 @@
 package com.dranoer.giphyapp.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,8 +33,12 @@ class MainFragment : Fragment() {
         binding.progressbar.isVisible = true
 
         val recyclerView = binding.recyclerview
-        val adapter = MainAdapter(MainAdapter.OnClickListener { itemId ->
-        })
+        val adapter = MainAdapter(
+            MainAdapter.OnClickListener { itemId ->
+                viewModel.updateFavorite(itemId)
+                Log.d("nazanin", "id is ${itemId}")
+            }
+        )
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
