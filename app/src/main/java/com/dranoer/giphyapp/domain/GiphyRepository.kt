@@ -49,4 +49,8 @@ class GiphyRepository @Inject constructor(
         val isFavorite: Boolean = localDataSource.getGiphy(id)
         localDataSource.updateGiphy(id, !isFavorite)
     }
+
+    fun getFavorites(): Flow<List<GiphyEntity>> {
+        return localDataSource.favorites
+    }
 }

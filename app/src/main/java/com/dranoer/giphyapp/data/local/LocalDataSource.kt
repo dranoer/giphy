@@ -8,6 +8,7 @@ import javax.inject.Inject
 class LocalDataSource @Inject constructor(private val giphyDao: GiphyDao) {
 
     val giphies: Flow<List<GiphyEntity>> = giphyDao.getGiphies()
+    val favorites: Flow<List<GiphyEntity>> = giphyDao.getFavorites(true)
 
     suspend fun saveGiphies(giphies: List<GiphyEntity>) {
         giphyDao.saveGiphies(giphies)

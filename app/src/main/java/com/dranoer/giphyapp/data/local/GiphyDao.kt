@@ -25,4 +25,7 @@ interface GiphyDao {
      */
     @Query("UPDATE giphy_table SET isFavorite = :isFavorite WHERE id =:id")
     suspend fun updateGiphy(id: String, isFavorite: Boolean)
+
+    @Query("SELECT * FROM giphy_table WHERE isFavorite =:isFavorite")
+    fun getFavorites(isFavorite: Boolean): Flow<List<GiphyEntity>>
 }

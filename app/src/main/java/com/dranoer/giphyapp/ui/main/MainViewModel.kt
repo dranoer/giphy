@@ -17,6 +17,7 @@ class MainViewModel @ExperimentalCoroutinesApi
 ) : ViewModel() {
 
     val allGiphies: LiveData<List<GiphyEntity>> = repository.getGiphies().asLiveData()
+    val allFavorites: LiveData<List<GiphyEntity>> = repository.getFavorites().asLiveData()
 
     fun getTrends() {
         viewModelScope.launch {

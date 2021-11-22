@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.databinding.FragmentFavBinding
 import com.dranoer.giphyapp.ui.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,12 +34,9 @@ class FavFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        adapter.submitList(
-            listOf(
-                GiphyEntity(id = "1", isFavorite = true),
-                GiphyEntity(id = "2", isFavorite = false),
-            )
-        )
+        viewModel.allFavorites.observe(viewLifecycleOwner) {
+            it.let { adapter.submitList(it) }
+        }
 
         return view
     }
