@@ -5,7 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class DataSource @Inject constructor(
+class NetworkDataSource @Inject constructor(
     private val webService: WebService
 ) {
 
