@@ -8,6 +8,7 @@ import com.dranoer.giphyapp.data.remote.Resource
 import com.dranoer.giphyapp.domain.GiphyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,6 +36,7 @@ class MainViewModel @ExperimentalCoroutinesApi
 
     init {
         getTrends()
+        getFavorites()
     }
 
     fun getTrends() {
@@ -65,6 +67,17 @@ class MainViewModel @ExperimentalCoroutinesApi
                 }
                 is Resource.Failure -> {}
             }
+        }
+    }
+
+    fun getFavorites() {
+        viewModelScope.launch {
+            repository.getFavorites()
+                .collect {
+                    viewStateLiveData.value = viewStateLiveData.value?.copy(
+                        favGiphyList = it
+                    )
+                }
         }
     }
 

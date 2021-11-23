@@ -1,13 +1,14 @@
 package com.dranoer.giphyapp.domain
 
 import com.dranoer.giphyapp.data.local.LocalDataSource
-import com.dranoer.giphyapp.data.mapper.mapToEntity
+import com.dranoer.giphyapp.data.mapper.mapToDomain
 import com.dranoer.giphyapp.data.model.Giphy
 import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.data.remote.NetworkDataSource
 import com.dranoer.giphyapp.data.remote.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -20,7 +21,7 @@ class GiphyRepository @Inject constructor(
         val response = networkDataSource.getTrends()
         return when (response) {
             is Resource.Success -> {
-                Resource.Success(response.data.map { it.mapToEntity() })
+                Resource.Success(response.data.map { it.mapToDomain() })
             }
             is Resource.Failure -> {
                 Resource.Failure(response.exception)
@@ -32,7 +33,7 @@ class GiphyRepository @Inject constructor(
         val response = networkDataSource.search(name)
         return when (response) {
             is Resource.Success -> {
-                Resource.Success(response.data.map { it.mapToEntity() })
+                Resource.Success(response.data.map { it.mapToDomain() })
             }
             is Resource.Failure -> {
                 Resource.Failure(response.exception)
@@ -49,7 +50,8 @@ class GiphyRepository @Inject constructor(
         localDataSource.updateGiphy(id, !isFavorite)
     }
 
-    fun getFavorites(): Flow<List<GiphyEntity>> {
+    fun getFavorites(): Flow<List<Giphy>> {
         return localDataSource.favorites
+            .map { gifList -> gifList.map { giphy -> giphy.mapToDomain() } }
     }
 }

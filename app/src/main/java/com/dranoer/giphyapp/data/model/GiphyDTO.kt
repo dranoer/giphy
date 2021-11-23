@@ -28,12 +28,10 @@ data class GiphyDTO(
 data class GiphyEntity(
     @PrimaryKey
     val id: String,
-
     val title: String = "",
+    val previewUrl: String,
+    val username: String?,
     val isFavorite: Boolean = false,
-
-//    val images: GiphyImage,
-//    val user: User?,
 )
 
 /**
