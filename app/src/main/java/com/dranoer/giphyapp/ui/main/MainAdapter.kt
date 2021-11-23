@@ -14,7 +14,7 @@ import com.dranoer.giphyapp.R
 import com.dranoer.giphyapp.data.model.Giphy
 
 class MainAdapter constructor(
-    private val onClickListener: OnClickListener
+    private val onItemClickListener: ((giphy: Giphy) -> Unit)?
 ) : ListAdapter<Giphy, MainAdapter.MainViewHolder>(MAIN_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
@@ -36,7 +36,7 @@ class MainAdapter constructor(
         init {
             buttonItemView.setOnClickListener {
                 val item = getItem(adapterPosition)
-                onClickListener.onClick(item.id)
+                onItemClickListener?.invoke(item)
             }
         }
 
@@ -68,9 +68,5 @@ class MainAdapter constructor(
                 return oldItem.id == newItem.id
             }
         }
-    }
-
-    class OnClickListener(val clickListener: (id: String) -> Unit) {
-        fun onClick(id: String) = clickListener(id)
     }
 }

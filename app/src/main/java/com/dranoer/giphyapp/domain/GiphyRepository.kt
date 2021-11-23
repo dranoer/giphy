@@ -21,7 +21,9 @@ class GiphyRepository @Inject constructor(
         val response = networkDataSource.getTrends()
         return when (response) {
             is Resource.Success -> {
-                Resource.Success(response.data.map { it.mapToDomain() })
+                Resource.Success(response.data
+                    .map { it.mapToDomain() }
+                    .map { it.copy(isFavorite = getFavState(it.id)) })
             }
             is Resource.Failure -> {
                 Resource.Failure(response.exception)
@@ -29,11 +31,17 @@ class GiphyRepository @Inject constructor(
         }
     }
 
+    suspend fun getFavState(giphyId: String): Boolean {
+        return localDataSource.getFavStateGiphy(giphyId) ?: false
+    }
+
     suspend fun search(name: String): Resource<List<Giphy>> {
         val response = networkDataSource.search(name)
         return when (response) {
             is Resource.Success -> {
-                Resource.Success(response.data.map { it.mapToDomain() })
+                Resource.Success(response.data
+                    .map { it.mapToDomain() }
+                    .map { it.copy(isFavorite = getFavState(it.id)) })
             }
             is Resource.Failure -> {
                 Resource.Failure(response.exception)
@@ -45,9 +53,8 @@ class GiphyRepository @Inject constructor(
         return localDataSource.giphies
     }
 
-    suspend fun updateGiphy(id: String) {
-        val isFavorite: Boolean = localDataSource.getGiphy(id)
-        localDataSource.updateGiphy(id, !isFavorite)
+    suspend fun updateFavGiphy(giphy: Giphy) {
+        localDataSource.saveGiphy(giphy.copy(isFavorite = !giphy.isFavorite))
     }
 
     fun getFavorites(): Flow<List<Giphy>> {

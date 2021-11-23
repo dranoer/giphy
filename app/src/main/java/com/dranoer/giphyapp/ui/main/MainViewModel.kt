@@ -73,17 +73,26 @@ class MainViewModel @ExperimentalCoroutinesApi
     fun getFavorites() {
         viewModelScope.launch {
             repository.getFavorites()
-                .collect {
+                .collect { faveList ->
+
+                    val updatedMainList = viewStateLiveData.value?.giphyList
+                        ?.map {
+                            val isFav =
+                                faveList.find { fav -> fav.id == it.id }?.isFavorite ?: false
+                            it.copy(isFavorite = isFav)
+                        } ?: listOf()
+
                     viewStateLiveData.value = viewStateLiveData.value?.copy(
-                        favGiphyList = it
+                        favGiphyList = faveList,
+                        giphyList = updatedMainList
                     )
                 }
         }
     }
 
-    fun updateFavorite(id: String) {
+    fun updateFavorite(giphy: Giphy) {
         viewModelScope.launch {
-            repository.updateGiphy(id)
+            repository.updateFavGiphy(giphy)
         }
     }
 }

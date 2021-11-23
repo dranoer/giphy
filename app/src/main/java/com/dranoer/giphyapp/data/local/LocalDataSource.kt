@@ -1,5 +1,7 @@
 package com.dranoer.giphyapp.data.local
 
+import com.dranoer.giphyapp.data.mapper.mapToEntity
+import com.dranoer.giphyapp.data.model.Giphy
 import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.data.remote.Resource
 import kotlinx.coroutines.flow.Flow
@@ -14,11 +16,15 @@ class LocalDataSource @Inject constructor(private val giphyDao: GiphyDao) {
         giphyDao.saveGiphies(giphies)
     }
 
+    suspend fun saveGiphy(giphy: Giphy) {
+        giphyDao.saveGiphy(giphy.mapToEntity())
+    }
+
     suspend fun getCashedGiphies(): Resource<Flow<List<GiphyEntity>>> {
         return Resource.Success(giphyDao.getGiphies())
     }
 
-    suspend fun getGiphy(id: String): Boolean {
+    suspend fun getFavStateGiphy(id: String): Boolean? {
         return giphyDao.getGiphy(id)
     }
 

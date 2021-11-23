@@ -13,7 +13,7 @@ import com.dranoer.giphyapp.R
 import com.dranoer.giphyapp.data.model.Giphy
 
 class FavAdapter constructor(
-    private val onClickListener: OnClickListener
+    private val onItemClickListener: ((giphy: Giphy) -> Unit)?
 ) : ListAdapter<Giphy, FavAdapter.FavViewHolder>(FAV_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
@@ -33,7 +33,7 @@ class FavAdapter constructor(
         init {
             buttonItemView.setOnClickListener {
                 val item = getItem(adapterPosition)
-                onClickListener.onClick(item.id)
+                onItemClickListener?.invoke(item)
             }
         }
 
@@ -62,9 +62,5 @@ class FavAdapter constructor(
                 return oldItem.id == newItem.id
             }
         }
-    }
-
-    class OnClickListener(val clickListener: (id: String) -> Unit) {
-        fun onClick(id: String) = clickListener(id)
     }
 }

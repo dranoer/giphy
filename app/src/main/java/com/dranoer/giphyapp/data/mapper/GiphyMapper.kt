@@ -18,7 +18,17 @@ fun GiphyEntity.mapToDomain(): Giphy {
     return Giphy(
         id = this.id,
         title = this.title,
-        isFavorite = false,
+        isFavorite = this.isFavorite,
+        previewUrl = this.previewUrl,
+        username = this.username,
+    )
+}
+
+fun Giphy.mapToEntity(): GiphyEntity {
+    return GiphyEntity(
+        id = this.id,
+        title = this.title ?: "",
+        isFavorite = this.isFavorite,
         previewUrl = this.previewUrl,
         username = this.username,
     )
