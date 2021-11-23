@@ -37,9 +37,12 @@ class MainFragment : Fragment() {
             }
         }
 
-        binding.searchView.onQueryTextChanged {
+        binding.searchView.onQueryTextChanged(onQueryTextChanged = {
             viewModel.search(it)
-        }
+        }, onTextCleared = {
+            viewModel.getTrends()
+        })
+
     }
 
     private fun setupRecyclerview() {

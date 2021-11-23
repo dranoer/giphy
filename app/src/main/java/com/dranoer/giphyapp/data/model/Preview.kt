@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Preview(
     @field:SerializedName("url")
-    val imageUrl: String,
+    val imageUrl: String?,
 )

@@ -41,6 +41,10 @@ class MainViewModel @ExperimentalCoroutinesApi
 
     fun getTrends() {
         viewModelScope.launch {
+            viewStateLiveData.value = viewStateLiveData.value?.copy(
+                layoutState = ContentState.Loading,
+                giphyList = listOf()
+            )
             val result = repository.getTrending()
             when (result) {
                 is Resource.Success -> {
@@ -49,13 +53,22 @@ class MainViewModel @ExperimentalCoroutinesApi
                         giphyList = result.data
                     )
                 }
-                is Resource.Failure -> {}
+                is Resource.Failure -> {
+                    viewStateLiveData.value = viewStateLiveData.value?.copy(
+                        layoutState = ContentState.Data,
+                        giphyList = listOf()
+                    )
+                }
             }
         }
     }
 
     fun search(name: String) {
         viewModelScope.launch {
+            viewStateLiveData.value = viewStateLiveData.value?.copy(
+                layoutState = ContentState.Loading,
+                giphyList = listOf()
+            )
             val result = repository.search(name)
             when (result) {
                 is Resource.Success -> {
@@ -65,7 +78,12 @@ class MainViewModel @ExperimentalCoroutinesApi
                         giphyList = result.data
                     )
                 }
-                is Resource.Failure -> {}
+                is Resource.Failure -> {
+                    viewStateLiveData.value = viewStateLiveData.value?.copy(
+                        layoutState = ContentState.Data,
+                        giphyList = listOf()
+                    )
+                }
             }
         }
     }

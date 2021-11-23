@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class GiphyImage(
     @field:SerializedName("preview_gif")
-    val preview: Preview,
+    val preview: Preview?,
 )

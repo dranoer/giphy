@@ -40,7 +40,7 @@ data class GiphyEntity(
 data class Giphy(
     val id: String,
     val title: String?,
-    val previewUrl: String,
+    val previewUrl: String?,
     val username: String?,
     val isFavorite: Boolean = false,
 )
