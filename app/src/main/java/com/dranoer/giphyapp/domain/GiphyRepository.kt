@@ -1,7 +1,7 @@
 package com.dranoer.giphyapp.domain
 
-import android.util.Log
 import com.dranoer.giphyapp.data.local.LocalDataSource
+import com.dranoer.giphyapp.data.mapper.mapToEntity
 import com.dranoer.giphyapp.data.model.Giphy
 import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.data.remote.NetworkDataSource
@@ -18,27 +18,26 @@ class GiphyRepository @Inject constructor(
 
     suspend fun getTrending(): Resource<List<Giphy>> {
         val response = networkDataSource.getTrends()
-        val giphiesList = ArrayList<GiphyEntity>()
-
-        when (response) {
+        return when (response) {
             is Resource.Success -> {
-                for (item in response.data) {
-                    val giphyEntity =
-                        GiphyEntity(id = item.id, title = item.title!!, isFavorite = false)
-                    giphiesList.add(giphyEntity)
-                }
-                localDataSource.saveGiphies(giphiesList)
+                Resource.Success(response.data.map { it.mapToEntity() })
             }
-            else -> {
-                Log.d("nazanin", "getting trends from networkDataSource has been failed :(")
+            is Resource.Failure -> {
+                Resource.Failure(response.exception)
             }
         }
-
-        return response
     }
 
     suspend fun search(name: String): Resource<List<Giphy>> {
-        return networkDataSource.search(name)
+        val response = networkDataSource.search(name)
+        return when (response) {
+            is Resource.Success -> {
+                Resource.Success(response.data.map { it.mapToEntity() })
+            }
+            is Resource.Failure -> {
+                Resource.Failure(response.exception)
+            }
+        }
     }
 
     fun getGiphies(): Flow<List<GiphyEntity>> {

@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dranoer.giphyapp.R
-import com.dranoer.giphyapp.data.model.GiphyEntity
+import com.dranoer.giphyapp.data.model.Giphy
 
 class MainAdapter constructor(
     private val onClickListener: OnClickListener
-) : ListAdapter<GiphyEntity, MainAdapter.MainViewHolder>(MAIN_COMPARATOR) {
+) : ListAdapter<Giphy, MainAdapter.MainViewHolder>(MAIN_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder.create(parent)
@@ -74,12 +74,12 @@ class MainAdapter constructor(
     }
 
     companion object {
-        private val MAIN_COMPARATOR = object : DiffUtil.ItemCallback<GiphyEntity>() {
-            override fun areItemsTheSame(oldItem: GiphyEntity, newItem: GiphyEntity): Boolean {
+        private val MAIN_COMPARATOR = object : DiffUtil.ItemCallback<Giphy>() {
+            override fun areItemsTheSame(oldItem: Giphy, newItem: Giphy): Boolean {
                 return oldItem === newItem
             }
 
-            override fun areContentsTheSame(oldItem: GiphyEntity, newItem: GiphyEntity): Boolean {
+            override fun areContentsTheSame(oldItem: Giphy, newItem: Giphy): Boolean {
                 return oldItem.id == newItem.id
             }
         }

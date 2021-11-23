@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +18,6 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -29,22 +27,12 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        viewModel.getTrends()
-        binding.progressbar.isVisible = true
+        setupRecyclerview()
 
-        val recyclerView = binding.recyclerview
-        val adapter = MainAdapter(
-            MainAdapter.OnClickListener { itemId ->
-                viewModel.updateFavorite(itemId)
-                Log.d("nazanin", "id is ${itemId}")
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner) {
+            it?.let {
+                renderUI(it)
             }
-        )
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.allGiphies.observe(viewLifecycleOwner) {
-            it.let { adapter.submitList(it) }
-            binding.progressbar.isGone = true
         }
 
         binding.searchView.onQueryTextChanged {
@@ -52,5 +40,22 @@ class MainFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun setupRecyclerview() {
+        val recyclerView = binding.recyclerview
+        val adapter = MainAdapter(
+            MainAdapter.OnClickListener { itemId ->
+                viewModel.updateFavorite(itemId)
+                Log.d("nazanin", "id is $itemId")
+            }
+        )
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun renderUI(viewState: MainViewModel.MainViewState) {
+        binding.progressbar.isVisible = (viewState.layoutState == ContentState.Loading)
+        (binding.recyclerview.adapter as MainAdapter).submitList(viewState.giphyList)
     }
 }
