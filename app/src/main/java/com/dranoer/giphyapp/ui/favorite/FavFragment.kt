@@ -1,6 +1,7 @@
 package com.dranoer.giphyapp.ui.favorite
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,21 +24,31 @@ class FavFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFavBinding.inflate(inflater, container, false)
-        val view = binding.root
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupRecyclerview()
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner) {
+            it?.let {
+                renderUI(it)
+            }
+        }
+    }
+
+    private fun setupRecyclerview() {
         val recyclerView = binding.favoriteRecyclerview
         val adapter = FavAdapter(
-            FavAdapter.OnClickListener {
-                viewModel.updateFavorite(it)
+            FavAdapter.OnClickListener { itemId ->
+                viewModel.updateFavorite(itemId)
+                Log.d("nazanin", "id is $itemId")
             }
         )
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+    }
 
-        viewModel.allFavorites.observe(viewLifecycleOwner) {
-            it.let { adapter.submitList(it) }
-        }
-
-        return view
+    private fun renderUI(viewState: MainViewModel.MainViewState) {
+        (binding.favoriteRecyclerview.adapter as FavAdapter).submitList(viewState.favGiphyList)
     }
 }

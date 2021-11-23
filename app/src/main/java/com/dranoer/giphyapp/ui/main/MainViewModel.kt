@@ -1,8 +1,9 @@
 package com.dranoer.giphyapp.ui.main
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dranoer.giphyapp.data.model.Giphy
-import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.data.remote.Resource
 import com.dranoer.giphyapp.domain.GiphyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class MainViewModel @ExperimentalCoroutinesApi
         val pageLoading: Boolean = false,
         val searchTerms: String = "",
         val giphyList: List<Giphy> = listOf(),
+        val favGiphyList: List<Giphy> = listOf(),
     )
 
     val viewStateLiveData: MutableLiveData<MainViewState> = MutableLiveData(MainViewState())
@@ -34,9 +36,6 @@ class MainViewModel @ExperimentalCoroutinesApi
     init {
         getTrends()
     }
-
-    val allGiphies: LiveData<List<GiphyEntity>> = repository.getGiphies().asLiveData()
-    val allFavorites: LiveData<List<GiphyEntity>> = repository.getFavorites().asLiveData()
 
     fun getTrends() {
         viewModelScope.launch {
