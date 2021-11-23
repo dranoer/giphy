@@ -2,6 +2,7 @@ package com.dranoer.giphyapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.dranoer.giphyapp.BuildConfig
 import com.dranoer.giphyapp.Constants
 import com.dranoer.giphyapp.Constants.DATABASE_NAME
 import com.dranoer.giphyapp.data.local.GiphyDatabase
@@ -17,6 +18,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -30,8 +32,16 @@ object AppModule {
 
         val gson = GsonBuilder().setLenient().create()
 
+        val httpLogger = HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG)
+                HttpLoggingInterceptor.Level.BODY
+            else
+                HttpLoggingInterceptor.Level.NONE
+        }
+
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(RequestInterceptor())
+            .addInterceptor(httpLogger)
             .build()
 
         return Retrofit.Builder()
