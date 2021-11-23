@@ -4,7 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-data class Giphy(
+/**
+ * Data Transfer Object, Model for remote
+ */
+data class GiphyDTO(
     @field:SerializedName("id")
     val id: String,
 
@@ -18,6 +21,9 @@ data class Giphy(
     val user: User?,
 )
 
+/**
+ * Model for dataBase
+ */
 @Entity(tableName = "giphy_table")
 data class GiphyEntity(
     @PrimaryKey
@@ -28,4 +34,15 @@ data class GiphyEntity(
 
 //    val images: GiphyImage,
 //    val user: User?,
+)
+
+/**
+ * Model for entity, a unique model for ui to interact with
+ */
+data class Giphy(
+    val id: String,
+    val title: String?,
+    val previewUrl: String,
+    val username: String?,
+    val isFavorite: Boolean = false,
 )
