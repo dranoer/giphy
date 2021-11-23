@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -49,6 +50,16 @@ class MainFragment : Fragment() {
 
         binding.searchView.onQueryTextChanged {
             viewModel.search(it)
+        }
+
+        if (binding.searchView.isEmpty()) {
+            viewModel.getTrends()
+        }
+
+        viewModel.searchResult.observe(viewLifecycleOwner) {
+            adapter.currentList.clear()
+            adapter.notifyDataSetChanged()
+            it.let { adapter.submitList(it) }
         }
 
         return view

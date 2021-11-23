@@ -28,4 +28,8 @@ interface GiphyDao {
 
     @Query("SELECT * FROM giphy_table WHERE isFavorite =:isFavorite")
     fun getFavorites(isFavorite: Boolean): Flow<List<GiphyEntity>>
+
+    //    @Query("SELECT * FROM giphy_table WHERE title =:name")
+    @Query("SELECT * FROM giphy_table")
+    fun searchResult(): Flow<List<GiphyEntity>>
 }

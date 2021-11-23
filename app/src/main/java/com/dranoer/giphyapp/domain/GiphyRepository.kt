@@ -37,8 +37,28 @@ class GiphyRepository @Inject constructor(
         return response
     }
 
-    suspend fun search(name: String): Resource<List<Giphy>> {
-        return networkDataSource.search(name)
+    suspend fun search(name: String): Flow<List<GiphyEntity>> {
+//        localDataSource.getSearchResult(name)
+        val response = networkDataSource.search(name)
+        val searchResultList = ArrayList<GiphyEntity>()
+
+        when (response) {
+            is Resource.Success -> {
+                for (item in response.data) {
+                    val giphyEntity =
+                        GiphyEntity(id = item.id, title = item.title!!, isFavorite = false)
+                    searchResultList.add(giphyEntity)
+                }
+//                localDataSource.saveSearchResult(searchResultList)
+            }
+            else -> {
+                Log.d("nazanin", "searching from networkDataSource has been failed :(")
+            }
+        }
+
+//        return response
+
+        return searchResultList
     }
 
     fun getGiphies(): Flow<List<GiphyEntity>> {
@@ -53,4 +73,10 @@ class GiphyRepository @Inject constructor(
     fun getFavorites(): Flow<List<GiphyEntity>> {
         return localDataSource.favorites
     }
+
+    fun getSearchResult(): Flow<List<GiphyEntity>> {
+        return search()
+    }
+
+
 }

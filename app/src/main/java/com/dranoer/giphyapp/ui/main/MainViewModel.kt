@@ -18,12 +18,21 @@ class MainViewModel @ExperimentalCoroutinesApi
 
     val allGiphies: LiveData<List<GiphyEntity>> = repository.getGiphies().asLiveData()
     val allFavorites: LiveData<List<GiphyEntity>> = repository.getFavorites().asLiveData()
+    lateinit var searchResult: LiveData<List<GiphyEntity>>
+//    = repository.getSearchResult().asLiveData()
 
     fun getTrends() {
         viewModelScope.launch {
             repository.getTrending()
         }
     }
+
+//    fun search(name: String) {
+//        viewModelScope.launch {
+//            var a = repository.search(name).
+//            searchResult = repository.search(name)
+//        }
+//    }
 
     fun search(name: String) = liveData(Dispatchers.IO) {
         emit(Resource.Loading())
