@@ -6,7 +6,6 @@ import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.data.remote.Resource
 import com.dranoer.giphyapp.domain.GiphyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,11 +53,19 @@ class MainViewModel @ExperimentalCoroutinesApi
         }
     }
 
-    fun search(name: String) = liveData(Dispatchers.IO) {
-        try {
-            emit(repository.search(name))
-        } catch (e: Exception) {
-            emit(Resource.Failure(e))
+    fun search(name: String) {
+        viewModelScope.launch {
+            val result = repository.search(name)
+            when (result) {
+                is Resource.Success -> {
+                    viewStateLiveData.value = viewStateLiveData.value?.copy(
+                        searchTerms = name,
+                        layoutState = ContentState.Data,
+                        giphyList = result.data
+                    )
+                }
+                is Resource.Failure -> {}
+            }
         }
     }
 
