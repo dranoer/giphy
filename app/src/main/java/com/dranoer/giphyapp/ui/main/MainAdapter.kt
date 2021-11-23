@@ -61,11 +61,12 @@ class MainAdapter constructor(
     companion object {
         private val MAIN_COMPARATOR = object : DiffUtil.ItemCallback<Giphy>() {
             override fun areItemsTheSame(oldItem: Giphy, newItem: Giphy): Boolean {
-                return oldItem === newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Giphy, newItem: Giphy): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.id == newItem.id &&
+                        oldItem.isFavorite == newItem.isFavorite
             }
         }
     }
