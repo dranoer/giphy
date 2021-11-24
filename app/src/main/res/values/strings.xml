@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Giphy</string>
+    <string name="button_favorite_desc">Click to make it fav/unfav</string>
 </resources>
