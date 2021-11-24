@@ -9,11 +9,11 @@ class NetworkDataSource @Inject constructor(
     private val webService: WebService
 ) {
 
-    suspend fun getTrends(): Resource<List<GiphyDTO>> {
-        return Resource.Success(webService.getTrends().giphyDTOS)
+    suspend fun getTrends(page: Int): Resource<List<GiphyDTO>> {
+        return Resource.Success(webService.getTrends((page - 1) * 10, 10).giphyDTOS)
     }
 
-    suspend fun search(name: String): Resource<List<GiphyDTO>> {
-        return Resource.Success(webService.search(name).giphyDTOS)
+    suspend fun search(name: String, page: Int): Resource<List<GiphyDTO>> {
+        return Resource.Success(webService.search(name, (page - 1) * 10, 10).giphyDTOS)
     }
 }

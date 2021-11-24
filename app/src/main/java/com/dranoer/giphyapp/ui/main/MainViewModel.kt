@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 sealed class ContentState {
     object Loading : ContentState()
-    object Data : ContentState()
+    object TrendsData : ContentState()
+    object SearchData : ContentState()
     data class Error(val message: String) : ContentState()
 }
 
@@ -27,6 +28,7 @@ class MainViewModel @ExperimentalCoroutinesApi
     data class MainViewState(
         val layoutState: ContentState = ContentState.Loading,
         val pageLoading: Boolean = false,
+        val pageNumber: Int = 1,
         val searchTerms: String = "",
         val giphyList: List<Giphy> = listOf(),
         val favGiphyList: List<Giphy> = listOf(),
@@ -39,54 +41,104 @@ class MainViewModel @ExperimentalCoroutinesApi
         getFavorites()
     }
 
+
     fun getTrends() {
+        getPaginationTrends(1)
+    }
+
+    fun search(terms: String) {
+        getSearchPaginate(terms, 1)
+    }
+
+
+    fun onLoadMore() {
+        val viewState = viewStateLiveData.value ?: return
+        val page = viewState.pageNumber
+        if (viewState.layoutState == ContentState.TrendsData) {
+            getPaginationTrends(page)
+        } else {
+            getSearchPaginate(viewState.searchTerms, page)
+        }
+    }
+
+    private fun getPaginationTrends(page: Int) {
         viewModelScope.launch {
-            viewStateLiveData.value = viewStateLiveData.value?.copy(
-                layoutState = ContentState.Loading,
-                giphyList = listOf()
-            )
-            val result = repository.getTrending()
+            if (page == 1) {
+                viewStateLiveData.value = viewStateLiveData.value?.copy(
+                    layoutState = ContentState.Loading,
+                    giphyList = listOf(),
+                    pageLoading = true
+                )
+            } else {
+                viewStateLiveData.value = viewStateLiveData.value?.copy(
+                    pageLoading = true
+                )
+            }
+            val result = repository.getTrending(page)
             when (result) {
                 is Resource.Success -> {
+                    val updatedList =
+                        viewStateLiveData.value?.giphyList?.toMutableList() ?: mutableListOf()
+                    updatedList.addAll(result.data)
+
                     viewStateLiveData.value = viewStateLiveData.value?.copy(
-                        layoutState = ContentState.Data,
-                        giphyList = result.data
+                        layoutState = ContentState.TrendsData,
+                        giphyList = updatedList,
+                        pageNumber = page + 1,
+                        pageLoading = false
                     )
                 }
                 is Resource.Failure -> {
                     viewStateLiveData.value = viewStateLiveData.value?.copy(
-                        layoutState = ContentState.Data,
-                        giphyList = listOf()
+                        layoutState = ContentState.Error(""),
+                        giphyList = listOf(),
+                        pageLoading = false
                     )
                 }
             }
         }
     }
 
-    fun search(name: String) {
+    private fun getSearchPaginate(name: String, page: Int) {
         viewModelScope.launch {
+            if (page == 1) {
+                viewStateLiveData.value = viewStateLiveData.value?.copy(
+                    layoutState = ContentState.Loading,
+                    giphyList = listOf(),
+                    searchTerms = name,
+                    pageLoading = true
+                )
+            } else {
+                viewStateLiveData.value = viewStateLiveData.value?.copy(
+                    pageLoading = true
+                )
+            }
+
             viewStateLiveData.value = viewStateLiveData.value?.copy(
                 layoutState = ContentState.Loading,
                 giphyList = listOf()
             )
-            val result = repository.search(name)
+            val result = repository.search(name, page)
             when (result) {
                 is Resource.Success -> {
                     viewStateLiveData.value = viewStateLiveData.value?.copy(
-                        searchTerms = name,
-                        layoutState = ContentState.Data,
-                        giphyList = result.data
+                        layoutState = ContentState.SearchData,
+                        giphyList = result.data,
+                        pageNumber = page + 1,
+                        pageLoading = false
                     )
                 }
                 is Resource.Failure -> {
                     viewStateLiveData.value = viewStateLiveData.value?.copy(
-                        layoutState = ContentState.Data,
-                        giphyList = listOf()
+                        layoutState = ContentState.Error(""),
+                        giphyList = listOf(),
+                        pageLoading = false
                     )
                 }
             }
         }
     }
+
 
     fun getFavorites() {
         viewModelScope.launch {

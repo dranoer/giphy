@@ -3,7 +3,6 @@ package com.dranoer.giphyapp.domain
 import com.dranoer.giphyapp.data.local.LocalDataSource
 import com.dranoer.giphyapp.data.mapper.mapToDomain
 import com.dranoer.giphyapp.data.model.Giphy
-import com.dranoer.giphyapp.data.model.GiphyEntity
 import com.dranoer.giphyapp.data.remote.NetworkDataSource
 import com.dranoer.giphyapp.data.remote.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,8 +16,8 @@ class GiphyRepository @Inject constructor(
     private val localDataSource: LocalDataSource,
 ) {
 
-    suspend fun getTrending(): Resource<List<Giphy>> {
-        val response = networkDataSource.getTrends()
+    suspend fun getTrending(page: Int): Resource<List<Giphy>> {
+        val response = networkDataSource.getTrends(page)
         return when (response) {
             is Resource.Success -> {
                 Resource.Success(response.data
@@ -35,8 +34,8 @@ class GiphyRepository @Inject constructor(
         return localDataSource.getFavStateGiphy(giphyId) ?: false
     }
 
-    suspend fun search(name: String): Resource<List<Giphy>> {
-        val response = networkDataSource.search(name)
+    suspend fun search(name: String, page: Int): Resource<List<Giphy>> {
+        val response = networkDataSource.search(name, page)
         return when (response) {
             is Resource.Success -> {
                 Resource.Success(response.data
@@ -47,10 +46,6 @@ class GiphyRepository @Inject constructor(
                 Resource.Failure(response.exception)
             }
         }
-    }
-
-    fun getGiphies(): Flow<List<GiphyEntity>> {
-        return localDataSource.giphies
     }
 
     suspend fun updateFavGiphy(giphy: Giphy) {

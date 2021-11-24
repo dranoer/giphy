@@ -52,10 +52,14 @@ class MainFragment : Fragment() {
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerview.setOnLoadMoreListener {
+            viewModel.onLoadMore()
+        }
     }
 
     private fun renderUI(viewState: MainViewModel.MainViewState) {
         binding.progressbar.isVisible = (viewState.layoutState == ContentState.Loading)
         (binding.recyclerview.adapter as MainAdapter).submitList(viewState.giphyList)
+        binding.recyclerview.setLoading(viewState.pageLoading)
     }
 }
