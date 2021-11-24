@@ -2,7 +2,7 @@
 <br />
 
 # Architecture
-The project is implemented with MVVM and it's written fully with Kotlin.  
+The project is implemented with MVVM and it's written fully with Kotlin. I just used one Java class for optimizing my recyclerview.
 
 # Technologies And Decisions
 In this section, I'll try to mention some of the important things I used within this project and I'll explain the reason behind some of my decisions.
