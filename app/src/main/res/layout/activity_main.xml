@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/gainsboro"
-        app:title="GIPHY"
+        app:title="@string/app_name"
         app:titleTextColor="@color/dimgrey" />
 
     <com.google.android.material.tabs.TabLayout
