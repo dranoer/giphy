@@ -1,4 +1,4 @@
-package com.dranoer.giphyapp
+package com.dranoer.giphyapp.ui
 
 import android.widget.SearchView
 

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dranoer.giphyapp.databinding.FragmentMainBinding
-import com.dranoer.giphyapp.onQueryTextChanged
+import com.dranoer.giphyapp.ui.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
